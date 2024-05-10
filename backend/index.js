@@ -2,6 +2,7 @@ const express=require('express')
 require('dotenv').config()
 const app=express();
 const db=require('./db')
+const redis=require('./redis')
 
 const authRoutes=require('./routes/auth')
 

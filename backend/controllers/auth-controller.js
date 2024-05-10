@@ -50,7 +50,6 @@ const login=async(req,res)=>{
             })
         }
         const isPassword=await bcrypt.compare(password,existingUser.password)
-        console.log(password,existingUser.password,isPassword);
         if(!isPassword){
             return res.status(404).json({
                 message:"Invalid password"
@@ -67,6 +66,30 @@ const login=async(req,res)=>{
         })
     }
 }
+//TODO:Implement deleting the token
+const logout=async(req,res)=>{
+    try{
+        //blacklist the token
+        res.status(200).json({
+            message:"User logged out successfully"
+        })
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
 
+const me=async(req,res)=>{
+    try{
 
-module.exports={register,login}
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
+
+module.exports={register,login,logout}
