@@ -15,8 +15,9 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:['user','admin','superAdmin'],
-        default:'user'
+        enum:['user','admin','SuperAdmin'],
+        default:'user',
+        
     },
     cart:[
         {

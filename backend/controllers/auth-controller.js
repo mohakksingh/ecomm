@@ -25,6 +25,7 @@ const register=async(req,res)=>{
         const token=generateToken({newUser})
         await newUser.save()
         res.status(201).json({
+            role:newUser.role,
             token:token,
             message:"User registered successfully"
         })
