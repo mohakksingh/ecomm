@@ -23,12 +23,12 @@ const register=async(req,res)=>{
             password:hashedPassword
         })
         const token=generateToken({newUser})
-        await newUser.save()
         res.status(201).json({
             role:newUser.role,
             token:token,
             message:"User registered successfully"
         })
+        await newUser.save()
     }catch(e){
         console.log(e);
         res.status(500).json({

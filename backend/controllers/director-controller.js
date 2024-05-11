@@ -5,7 +5,7 @@ const user = require('../models/user')
 
 const getAllUsers=async(req,res)=>{
     try{
-        const userData=req.user.existingUser
+        const userData=req.user.newUser || req.user.existingUser
         if(userData.role!=='SuperAdmin'){
             return res.status(401).json({
                 message:"Unauthorized"
@@ -27,7 +27,7 @@ const getAllUsers=async(req,res)=>{
 
 const getUsers=async(req,res)=>{
     try{
-        const userData=req.user.existingUser
+        const userData=req.user.existingUser || req.user.newUser
         console.log(userData);
         if(userData.role !=='SuperAdmin' && userData.role !=='admin'){
             return res.status(401).json({
@@ -49,7 +49,7 @@ const getUsers=async(req,res)=>{
 
 const getAdmins=async(req,res)=>{
     try{
-        const userData=req.user.existingUser
+        const userData=req.user.existingUser || req.user.newUser
         console.log(userData);
         if(userData.role !=='SuperAdmin'){
             return res.status(401).json({
