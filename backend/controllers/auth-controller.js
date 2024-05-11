@@ -5,6 +5,7 @@ const User=require('../models/user')
 const bcrypt=require('bcrypt')
 const {generateToken}=require('../middlewares/jwt')
 
+
 const register=async(req,res)=>{
     const {name,email,password}=req.body
     try{
@@ -57,7 +58,8 @@ const login=async(req,res)=>{
         }
         const token=generateToken({existingUser})
         res.status(200).json({
-            token:token
+            token:token,
+            id:existingUser._id
         })
     }catch(e){
         console.log(e);
@@ -81,9 +83,16 @@ const logout=async(req,res)=>{
     }
 }
 
-const me=async(req,res)=>{
+const profile=async(req,res)=>{
     try{
-
+        const userData=req.user.existingUser    
+        console.log(userData);
+        const userId=userData._id 
+        console.log(userId);
+        const user=await User.findById(userData)
+        res.status(200).json({
+            user:user
+        })
     }catch(e){
         console.log(e);
         res.status(500).json({
@@ -92,4 +101,8 @@ const me=async(req,res)=>{
     }
 }
 
-module.exports={register,login,logout}
+
+
+
+
+module.exports={register,login,logout,profile}

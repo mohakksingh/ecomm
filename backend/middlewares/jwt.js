@@ -17,7 +17,8 @@ const jwtAuthMiddleware=(req,res,next)=>{
     }
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET)
-        req.user=decoded.user
+        req.user=decoded
+        // console.log(req.user);
         next();
     }catch(e){
         console.log('Error authenticating token : ',e);
@@ -28,6 +29,6 @@ const jwtAuthMiddleware=(req,res,next)=>{
 }
 
 const generateToken=(user)=>{
-    return jwt.sign(user,process.env.JWT_SECRET,{expiresIn:60})
+    return jwt.sign(user,process.env.JWT_SECRET,{expiresIn:30000})
 }
 module.exports={jwtAuthMiddleware,generateToken}
