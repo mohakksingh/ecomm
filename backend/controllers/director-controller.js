@@ -4,6 +4,7 @@ const {generateToken}=require('../middlewares/jwt')
 const user = require('../models/user')
 const Transaction = require('../models/Transaction')
 const Order = require('../models/Order')
+const moment = require('moment');
 
 
 const getAllUsers=async(req,res)=>{
@@ -120,7 +121,115 @@ const getTransactions=async(req,res)=>{
     }
 }
 
-module.exports={getAllUsers,getUsers,getAdmins,assignRoles,getTransactions}
+//TODO: • View or filter expenses list ~ section for company expenses. 
+// const getCompanyExpenses=async(req,res)=>{
+//     try{
+//         const userData=req.user.existingUser || req.user.newUser
+//         if(!userData){
+//             return res.status(404).json({
+//                 message:"User not found"
+//             })
+//         }
+//         if(userData.role !=='SuperAdmin'){
+//             return res.status(401).json({
+//                 message:"Unauthorized"
+//             })
+//         }
+//     }catch(e){
+//         console.log(e);
+//         res.status(500).json({
+//             message:"Internal Server Error"
+//         })
+    
+//     }
+// }
+
+
+const getDailySales=async(req,res)=>{
+    try {
+        const today = moment().startOf('day');
+        const dailySales = await Transaction.aggregate([
+          {
+            $match: {
+              createdAt: {
+                $gte: today.toDate(),
+                $lte: moment(today).endOf('day').toDate(),
+              },
+              paymentStatus: 'completed',
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: { $sum: '$totalAmountToBePaid' },
+            },
+          },
+        ]);
+        console.log(dailySales[0]);
+        res.status(200).json(dailySales[0] || {totalSales: 0});
+      } catch (err) {
+        res.status(500).json({ message: 'Error fetching daily sales', error: err.message });
+      }
+
+}
+
+const getWeeklySales=async(req,res)=>{
+    try {
+        const startOfWeek= moment().startOf('week');
+        const endOfWeek= moment().endOf('week');
+        const weeklySales = await Transaction.aggregate([
+          {
+            $match: {
+              createdAt: {
+                $gte: startOfWeek.toDate(),
+                $lte: endOfWeek.toDate(),
+              },
+              paymentStatus: 'completed',
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: { $sum: '$totalAmountToBePaid' },
+            },
+          },
+        ]);
+        res.status(200).json(weeklySales[0] || {totalSales: 0});
+      } catch (err) {
+        res.status(500).json({ message: 'Error fetching weekly sales', error: err.message });
+      }
+
+}
+const getMonthlySales=async(req,res)=>{
+    try {
+        const startOfMonth= moment().startOf('month');
+        const endOfMonth= moment().endOf('month');
+        const monthlySales = await Transaction.aggregate([
+          {
+            $match: {
+              createdAt: {
+                $gte: startOfMonth.toDate(),
+                $lte: endOfMonth.toDate(),
+              },
+              paymentStatus: 'completed',
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: { $sum: '$totalAmountToBePaid' },
+            },
+          },
+        ]);
+        res.status(200).json(monthlySales[0] || {totalSales: 0});
+      } catch (err) {
+        res.status(500).json({ message: 'Error fetching weekly sales', error: err.message });
+      }
+
+}
+
+
+module.exports={getAllUsers,getUsers,getAdmins,assignRoles,getTransactions,getDailySales,getWeeklySales,getMonthlySales}
 
 
 

@@ -28,7 +28,17 @@ const jwtAuthMiddleware=(req,res,next)=>{
     }
 }
 
+const issuperAdmin=(req,res,next)=>{
+    const userData=req.user.existingUser || req.user.newUser
+    if(userData.role!=='SuperAdmin'){
+        return res.status(401).json({
+            message:"Unauthorized"
+        })
+    }
+    next();
+}
+
 const generateToken=(user)=>{
     return jwt.sign(user,process.env.JWT_SECRET,{expiresIn:30000})
 }
-module.exports={jwtAuthMiddleware,generateToken}
+module.exports={jwtAuthMiddleware,generateToken,issuperAdmin}
