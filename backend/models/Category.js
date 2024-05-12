@@ -12,6 +12,9 @@ const categorySchema=new mongoose.Schema({
     }
 })
 
+//check list of all transactions
+
+
 const Category=mongoose.model('Category',categorySchema)
 
 module.exports=Category

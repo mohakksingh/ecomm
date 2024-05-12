@@ -1,7 +1,10 @@
-const User=require('../models/user')
+const User=require('../models/user')        
 const bcrypt=require('bcrypt')
 const {generateToken}=require('../middlewares/jwt')
 const user = require('../models/user')
+const Transaction = require('../models/Transaction')
+const Order = require('../models/Order')
+
 
 const getAllUsers=async(req,res)=>{
     try{
@@ -22,7 +25,6 @@ const getAllUsers=async(req,res)=>{
             message:"Internal server error"
         })
     }
-
 }
 
 const getUsers=async(req,res)=>{
@@ -69,5 +71,66 @@ const getAdmins=async(req,res)=>{
     }
 }
 
-module.exports={getAllUsers,getUsers,getAdmins}
+//assign roles to other users
+const assignRoles=async(req,res)=>{
+    try{
+        const userData=req.user.existingUser || req.user.newUser
+        if(userData.role !=='SuperAdmin'){
+            return res.status(401).json({
+                message:"Unauthorized"
+            })
+        }
+        const {email,role}=req.body
+        const user =await User.findOne({email:email})
+        if(!user){
+            return res.status(401).json({
+                message:"User not found"
+            })
+        }
+        user.role=role
+        await user.save()
+        res.status(200).json({
+            message:"Role assigned successfully"
+        })
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
 
+const getTransactions=async(req,res)=>{
+    try{
+        const userData=req.user.existingUser ||req.user.newUser
+        if(userData.role !=='SuperAdmin'){
+            return res.status(401).json({
+                message:"Unauthorized"
+            })
+        }
+        const transactions=await Order.find();
+        res.status(200).json({
+            transactions
+        })
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            message:"Internal Server Error"
+        })
+    }
+}
+
+module.exports={getAllUsers,getUsers,getAdmins,assignRoles,getTransactions}
+
+
+
+//Super-Admin (Director) functionalities in admin panel Super-Admin will be able to; 
+// • . Assign roles to other. 
+// • Check list of all transactions 
+// • View or filter expenses list ~ section for company expenses. 
+// • View daily, weekly ahd monthly sales. 
+// • Check sales and purchasing ratio i.e. Graphical Representation 
+// • Keep a check balance on his/her employees 
+// • Keep a check on his/her customer to pay his remaining balance amount: 
+// • Check list of orders that are place to vendors 
+// • Check total products insight and performance
