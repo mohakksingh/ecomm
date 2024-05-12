@@ -2,6 +2,7 @@ const User=require('../models/user')
 const Order=require('../models/Order')
 const { login } = require('./auth-controller')
 
+//TODO:there are products to add still
 const giveOrder=async(req,res)=>{
     const { products, totalAmount, shippingAddress, paymentMethod }=req.body
     try{

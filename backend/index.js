@@ -10,7 +10,7 @@ const db=require('./db')
 const redis=require('./redis')
 
 const authRoutes=require('./routes/auth')
-const superRoutes=require('./routes/admin')
+const superRoutes=require('./routes/director')
 const userRoutes=require('./routes/user')
 
 app.use(express.json())

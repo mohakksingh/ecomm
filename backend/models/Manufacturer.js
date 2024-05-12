@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const vendorSchema=new mongoose.Schema({
+const manufacturerSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -11,4 +11,6 @@ const vendorSchema=new mongoose.Schema({
     }
 })
 
-const Manufacturer=mongoose.model('Manufacturer',vendorSchema)
+const Manufacturer=mongoose.model('Manufacturer',manufacturerSchema)
+
+module.exports=Manufacturer
