@@ -11,19 +11,21 @@ const transactionSchema=new mongoose.Schema({
         ref:"Order",
         required:true
     },
-    totalAmount:{
+    totalAmountToBePaid:{
         type:Number,
         required:true
     },
     type:{
         type:String,
+        default:'debit',
         enum:['credit','debit'],
         required:true
     },
-    status:{
+    paymentStatus:{
         type:String,
+        default:'pending',
         enum:['pending','completed'],
-        default:'pending'
+        
     },
     createdAt:{
         type:Date,
@@ -38,18 +40,14 @@ transactionSchema.pre('save',async function(next){
         if(!order){
             throw new Error('Order not found')
         }
-        if(order){
-            this.totalAmount=order.totalAmount
-        }
+        
 
         if(this.type==='credit'){
-            order.status='confirmed'
+            order.orderStatus='confirmed'
+
         }
         if(this.type==='debit'){
-            order.status='delivered'
-        }
-        if(order){
-            this.createdAt=order.createdAt
+            order.orderStatus='delivered'
         }
         await order.save()
         next()
