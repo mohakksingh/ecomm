@@ -91,4 +91,4 @@ const postCategory=async(req,res)=>{
     }
 }
 
-module.exports={postProduct,getProducts,postManufacturer,getManufacturer}
+module.exports={postProduct,postManufacturer,postCategory}
