@@ -108,7 +108,7 @@ const getTransactions=async(req,res)=>{
                 message:"Unauthorized"
             })
         }
-        const transactions=await Order.find();
+        const transactions=await Order.find({},{user:1,totalAmount:1,createdAt:1,status:1});
         res.status(200).json({
             transactions
         })

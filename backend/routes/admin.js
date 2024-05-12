@@ -7,3 +7,5 @@ const app=express()
 router.route('/product').post(jwtAuthMiddleware,postProduct)
 router.route('/manufacturer').post(jwtAuthMiddleware,postManufacturer)
 router.route('/category').post(jwtAuthMiddleware,postCategory)
+
+module.exports=router

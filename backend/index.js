@@ -12,11 +12,13 @@ const redis=require('./redis')
 const authRoutes=require('./routes/auth')
 const superRoutes=require('./routes/director')
 const userRoutes=require('./routes/user')
+const adminRoutes=require('./routes/admin')
 
 app.use(express.json())
 app.use('/auth',authRoutes)
 app.use('/super',superRoutes)
 app.use('/user',userRoutes)
+app.use('/admin',adminRoutes)
 
 app.get('/',(req,res)=>{
     res.send("Hi there")

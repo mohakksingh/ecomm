@@ -8,10 +8,11 @@ const Category = require('../models/Category')
 //TODO:Implement it in director-controller.js
 //TODO:Add category and manufacturer
 const postProduct=async(req,res)=>{
-    const {name,description,price,image,inStock,rating,features}=req.body
+    const {name,description,category,manufacturer,price,image,inStock,rating,features}=req.body
     try{
         const userData=req.user.newUser || req.user.existingUser
-        if(userData.role !=='admin' || userData.role !=='SuperAdmin'){
+        
+        if(userData.role !=='admin' && userData.role !=='SuperAdmin'){
             return res.status(401).json({
                 message:"Unauthorized"
             })
@@ -19,6 +20,8 @@ const postProduct=async(req,res)=>{
         const newProduct=new Product({
             name,
             description,
+            category,
+            manufacturer,
             price,
             image,
             inStock,
@@ -43,9 +46,9 @@ const postManufacturer=async(req,res)=>{
     const {name,description}=req.body
     try{
         const userData= req.user.existingUser|| req.user.newUser
-        if(userData.role !=='admin' || userData.role !=='SuperAdmin'){
+        if(userData.role !=='admin' && userData.role !=='SuperAdmin'){
             return res.status(401).json({
-                message:"Unauthorized"
+                message:"hi"
             })
         }
         const newManufacturer=new Manufacturer({
@@ -68,12 +71,15 @@ const postManufacturer=async(req,res)=>{
 const postCategory=async(req,res)=>{
     const {name,description}=req.body
     try{
-        const userData= req.user.existingUser|| req.user.newUser
-        if(userData.role !=='admin' || userData.role !=='SuperAdmin'){
+
+        const userData= req.user.existingUser || req.user.newUser
+        console.log(userData);
+        if(userData.role !=='admin' && userData.role !=='SuperAdmin'){
             return res.status(401).json({
-                message:"Unauthorized"
+                message:"unauthorized"
             })
         }
+        console.log(userData);
         const newCategory=new Category({
             name,
             description

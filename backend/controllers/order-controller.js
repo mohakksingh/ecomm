@@ -4,7 +4,7 @@ const { login } = require('./auth-controller')
 
 //TODO:there are products to add still
 const giveOrder=async(req,res)=>{
-    const { products, totalAmount, shippingAddress, paymentMethod }=req.body
+    const { user,products, totalAmount, shippingAddress, paymentMethod,status,createdAt }=req.body
     try{
         const userData=req.user.existingUser || req.user.newUser
         //user not found
@@ -21,9 +21,12 @@ const giveOrder=async(req,res)=>{
         }
         const newOrder=new Order({
             user:userData._id,
-            totalAmount,    
+            products,
+            totalAmount,
             shippingAddress,
-            paymentMethod   
+            paymentMethod,
+            status,
+            createdAt     
         })
         await newOrder.save()
         res.status(200).json({
